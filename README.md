@@ -3,6 +3,11 @@
 Deamon who capture TCP packets and store them in a database
 This is not the final version. The next updates will improve the database structure, and the data stored. 
 
+## Requires
+
+*--Scapy* 
+/bin/bash: q: command not found
+
 ## Usage
 
 `./main [--verbose True|False]`

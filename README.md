@@ -5,7 +5,9 @@ This is not the final version. The next updates will improve the database struct
 
 ## Usage
 
-`./main`
+`./main [--verbose True|False]`
+
+*--verbose* : Print the number of packets sniffed. True by default.
 
 ## Is the next versions...
 

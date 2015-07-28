@@ -11,7 +11,6 @@ import os
 import sys
 import time
 import sqlite3 as sqlite
-import re
 
 #####################################
 # Arguments
@@ -25,6 +24,12 @@ if user != "root":
         print "You need to be root to use me."
         sys.exit(1);
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--verbose', type=bool, default=False)
+
+args = parser.parse_args()
+
 #####################################
 #  Variables
 #####################################
@@ -34,7 +39,6 @@ if user != "root":
 cptPck = 0
 
 connexion = None
-regexSpecialChars = re.compile( "\ " )
 
 ####################################
 #  CLASS
@@ -131,6 +135,9 @@ def addContentPackToDb( contentPack ):
 		
 		cursor.execute( r'Insert into packets (packContent) values ("' + stringPack + '");' )
 
+
+# End function
+#####################################
 # Capture packets
 
 def captureStandart( packet ):
@@ -144,21 +151,19 @@ def captureStandart( packet ):
         #print( bcolors.OKGREEN + "src : " + packet[0][1].src + bcolors.ENDC + bcolors.OKBLUE + "\ndst : " + packet[0][1].dst + "\n" + bcolors.ENDC)
 
 	if( checkIpPresence( packet[0][1].dst )):
-		#print( bcolors.OKGREEN + "Exists in the DB" + bcolors.ENDC)
 		cptPck = cptPck
 	else:
-		#print( "Doesn't exists in the DB")
 		addIpToDb( packet[0][1].dst )
 
 	
 	try:
 		addContentPackToDb( packet[0][1] )
 	except sqlite.Error, e:
-		#print( packet[0][1].summary() )
 		addContentPackToDb( "" )
 	
-	sys.stdout.write( "\r" + str(cptPck) + " Packets sniffed." )
-	sys.stdout.flush()
+	if args.verbose:
+		sys.stdout.write( "\r" + str(cptPck) + " Packets sniffed." )
+		sys.stdout.flush()
 	
 
 
